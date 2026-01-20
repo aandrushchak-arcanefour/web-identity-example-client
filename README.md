@@ -80,6 +80,6 @@ npm run dev
 To test your client worked, go to
 `http://localhost:49613/`
 
-You should be able to enter the username, password you created and be redirected to home page which should say "Hello <email>"
+You should be able to enter the username, password you created and be redirected to home page which should say "Hello 'your users email'"
 
 If it says, "Hello undefined", it means your client scope was not configured correctly, go back to step 8
