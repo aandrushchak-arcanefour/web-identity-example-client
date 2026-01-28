@@ -6,8 +6,8 @@
   "author": "",
   "type": "module",
   "scripts": {
-    "server": "npm start --prefix alligator-backend",
-    "client": "npm start --prefix alligator-frontend",
+    "server": "npm start --prefix backend",
+    "client": "npm start --prefix frontend",
     "dev": "concurrently --kill-others \"npm run server\" \"npm run client\""
   },
   "dependencies": {},
