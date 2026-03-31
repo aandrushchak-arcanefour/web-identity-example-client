@@ -22,6 +22,34 @@ export default {
         authObject.login()
       }
     }
+    
+    // Redirect to complete-user-info only after fresh login (when OAuth fragments are present)
+    authObject.onAuthSuccess = () => {
+      // Check if we just came back from Keycloak login (has OAuth code in URL hash)
+      const hasOAuthFragments = window.location.hash && 
+        (window.location.hash.includes('code=') || window.location.hash.includes('state='))
+      
+      if (!hasOAuthFragments) {
+        // Not a fresh login, just loading page with existing tokens
+        return
+      }
+      
+      const currentPath = window.location.pathname
+      const isCompleteUserInfoPage = currentPath.includes('/complete-user-info')
+      
+      if (!isCompleteUserInfoPage) {
+        console.log('[AuthPlugin] Fresh login detected, redirecting to complete-user-info')
+        // Get URL without the OAuth fragments
+        const currentUrl = window.location.origin + window.location.pathname + window.location.search
+        const clientId = initOptions.clientId
+        const webIdentityFrontendUrl = import.meta.env.VITE_WEB_IDENTITY_FRONTEND_URL || 'http://localhost:4005'
+        
+        const completeUserInfoUrl = `${webIdentityFrontendUrl}/complete-user-info?final_destination=${encodeURIComponent(currentUrl)}&clientId=${encodeURIComponent(clientId)}`
+        console.log('[AuthPlugin] Redirecting to:', completeUserInfoUrl)
+        window.location.href = completeUserInfoUrl
+      }
+    }
+    
     let initializedKeycloak
     initializedKeycloak = await authObject.init({
       onLoad: 'login-required',
